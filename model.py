@@ -10,7 +10,7 @@ import os
 import pandas as pd
 
 class SimpleCNN(nn.Module):
-    def __init__(self, hidden_dims, output_dim=10):
+    def __init__(self, hidden_dim, output_dim=10):
         super(SimpleCNN, self).__init__()
         self.conv_layer = nn.Sequential(
 
@@ -39,28 +39,20 @@ class SimpleCNN(nn.Module):
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2),
         )
-        self.fc1 = nn.Linear(4096, hidden_dims)
-        self.fc2 = nn.Linear(hidden_dims, hidden_dims)
-        # self.fc3 = nn.Linear(hidden_dims, hidden_dims)
-        # self.fc4 = nn.Linear(hidden_dims, output_dim)
+        self.fc1 = nn.Linear(4096, hidden_dim)
+        self.fc2 = nn.Linear(hidden_dim, output_dim)
 
     def forward(self, x):
         x = self.conv_layer(x)
         x = x.view(x.size(0), -1)
         x = self.fc1(x)
         x = self.fc2(x)
-        # x = self.fc3(x)
-        # x = self.fc4(x)
         return x
     def weight_mean(self):
         weight1 = self.fc1.weight.cpu().detach().numpy()
         weight2 = self.fc2.weight.cpu().detach().numpy()
-        # weight3 = self.fc3.weight.cpu().detach().numpy()
-        # weight4 = self.fc4.weight.cpu().detach().numpy()
         mean1 = np.mean(weight1)
         mean2 = np.mean(weight2)
-        # mean3 = np.mean(weight3)
-        # mean4 = np.mean(weight4)
 
         return mean1, mean2
         #, mean3, mean4

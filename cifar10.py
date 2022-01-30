@@ -55,7 +55,7 @@ for dim in dims:
     model = SimpleCNN(hidden_dims=dim,output_dim=10).to(device)
     optimizers = [optim.Adam(model.parameters(), lr=lr), optim.SGD(model.parameters(),lr=lr), optim.Adadelta(model.parameters(),lr=lr),
                   optim.Adamax(model.parameters(),lr=lr),optim.AdamW(model.parameters(),lr=lr), optim.RMSprop(model.parameters(),lr=lr)]  # hyperparmeters3
-    # result = {'norm1': [], 'norm2': [], 'norm3': [], 'mean1': [], 'mean2': [], 'mean3': [], 'var1': [], 'var2': [], 'var3': []}
+
     result = {'norm1': [], 'norm2': [], 'mean1': [], 'mean2': [], 'var1': [], 'var2': []}
     weight = {'layer1':[], 'layer2':[]}
     criterion = nn.CrossEntropyLoss()
@@ -67,15 +67,14 @@ for dim in dims:
         norm1, norm2 = model.weight_norm()
         mean1, mean2 = model.weight_mean()
         var1, var2 = model.weight_var()
+
         result['norm1'].append(norm1)
         result['norm2'].append(norm2)
-        # result['norm3'].append(norm3)
         result['mean1'].append(mean1)
         result['mean2'].append(mean2)
-        # result['mean3'].append(mean3)
         result['var1'].append(var1)
         result['var2'].append(var2)
-        # result['var3'].append(var3)
+
         print(f"epoch: 0"
               f"\n[layer1] norm: {norm1:4f} mean:{mean1} var:{var1} "
               f"\n[layer2] norm: {norm2:4f} mean:{mean2} var:{var2} ")
@@ -92,26 +91,26 @@ for dim in dims:
                 optimizer.step()
 
             if (epoch + 1) % 10 == 0:
-                norm1, norm2, norm3, norm4 = model.weight_norm()
-                mean1, mean2, mean3, mean4 = model.weight_mean()
-                var1, var2, var3, var4 = model.weight_var()
+                norm1, norm2 = model.weight_norm()
+                mean1, mean2 = model.weight_mean()
+                var1, var2 = model.weight_var()
                 accuracy = get_accuracy(model, test_loader, device)
+
                 result['norm1'].append(norm1)
                 result['norm2'].append(norm2)
-                # result['norm3'].append(norm3)
                 result['mean1'].append(mean1)
                 result['mean2'].append(mean2)
-                # result['mean3'].append(mean3)
                 result['var1'].append(var1)
                 result['var2'].append(var2)
-                # result['var3'].append(var3)
+
                 print(f"epoch: 0"
                       f"\n[layer1] norm: {norm1:4f} mean:{mean1} var:{var1} "
                       f"\n[layer2] norm: {norm2:4f} mean:{mean2} var:{var2} "
                       f"\nloss accuracy: {accuracy:4f}")
 
 
-pd.DataFrame(result).to_csv('result_cifar10.csv', index=False) # 저장-형식 고민
+pd.DataFrame(result).to_csv('result_norm_cifar10.csv', index=False) # 저장-형식 고민
+pd.DataFrame(result).to_csv('result_weight_cifar10.csv', index=False) # 저장-형식 고민
 
 
 
