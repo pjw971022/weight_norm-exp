@@ -41,53 +41,54 @@ class SimpleCNN(nn.Module):
         )
         self.fc1 = nn.Linear(4096, hidden_dims)
         self.fc2 = nn.Linear(hidden_dims, hidden_dims)
-        self.fc3 = nn.Linear(hidden_dims, hidden_dims)
-        self.fc4 = nn.Linear(hidden_dims, output_dim)
+        # self.fc3 = nn.Linear(hidden_dims, hidden_dims)
+        # self.fc4 = nn.Linear(hidden_dims, output_dim)
 
     def forward(self, x):
         x = self.conv_layer(x)
         x = x.view(x.size(0), -1)
         x = self.fc1(x)
         x = self.fc2(x)
-        x = self.fc3(x)
-        x = self.fc4(x)
+        # x = self.fc3(x)
+        # x = self.fc4(x)
         return x
     def weight_mean(self):
         weight1 = self.fc1.weight.cpu().detach().numpy()
         weight2 = self.fc2.weight.cpu().detach().numpy()
-        weight3 = self.fc3.weight.cpu().detach().numpy()
-        weight4 = self.fc4.weight.cpu().detach().numpy()
+        # weight3 = self.fc3.weight.cpu().detach().numpy()
+        # weight4 = self.fc4.weight.cpu().detach().numpy()
         mean1 = np.mean(weight1)
         mean2 = np.mean(weight2)
-        mean3 = np.mean(weight3)
-        mean4 = np.mean(weight4)
+        # mean3 = np.mean(weight3)
+        # mean4 = np.mean(weight4)
 
-        return mean1, mean2, mean3, mean4
+        return mean1, mean2
+        #, mean3, mean4
 
     def weight_var(self):
         weight1 = self.fc1.weight.cpu().detach().numpy()
         weight2 = self.fc2.weight.cpu().detach().numpy()
-        weight3 = self.fc3.weight.cpu().detach().numpy()
-        weight4 = self.fc4.weight.cpu().detach().numpy()
+        # weight3 = self.fc3.weight.cpu().detach().numpy()
+        # weight4 = self.fc4.weight.cpu().detach().numpy()
         var1 = np.var(weight1)
         var2 = np.var(weight2)
-        var3 = np.var(weight3)
-        var4 = np.var(weight4)
+        # var3 = np.var(weight3)
+        # var4 = np.var(weight4)
 
-        return var1, var2, var3, var4
+        return var1, var2#, var3, var4
 
     def weight_norm(self):
         weight1 = self.fc1.weight.cpu().detach().numpy()
         weight2 = self.fc2.weight.cpu().detach().numpy()
-        weight3 = self.fc3.weight.cpu().detach().numpy()
-        weight4 = self.fc4.weight.cpu().detach().numpy()
+        # weight3 = self.fc3.weight.cpu().detach().numpy()
+        # weight4 = self.fc4.weight.cpu().detach().numpy()
 
         norm1 = np.mean(np.linalg.norm(weight1, axis=1))
         norm2 = np.mean(np.linalg.norm(weight2, axis=1))
-        norm3 = np.mean(np.linalg.norm(weight3, axis=1))
-        norm4 = np.mean(np.linalg.norm(weight4, axis=1))
+        # norm3 = np.mean(np.linalg.norm(weight3, axis=1))
+        # norm4 = np.mean(np.linalg.norm(weight4, axis=1))
 
-        return norm1, norm2, norm3, norm4
+        return norm1, norm2#, norm3, norm4
 
 
 
