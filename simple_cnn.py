@@ -7,15 +7,18 @@ import pytorch_lightning as pl
 
 from typing import List
 from typing import Union
+from omegaconf.listconfig import ListConfig
 
 
 class SimpleCNN(pl.LightningModule):
-    def __init__(self, hidden_dims: List, output_dim: int = 10,
+    def __init__(self,
+                 hidden_dims: ListConfig,
+                 output_dim: int = 10,
                  lr: float = 1e-3,
                  optimizer: Union[optim.Adam, optim.SGD, optim.AdamW, optim.RMSprop] = optim.Adam):
         # eg: hidden_dims = [521, 256, 128]
         super().__init__()
-        self.save_hyperparameters()
+        self.save_hyperparameters("optimizer")
         self.hidden_dims = hidden_dims
         self.output_dim = output_dim
         self.optimizer = optimizer
@@ -78,12 +81,12 @@ class SimpleCNN(pl.LightningModule):
         output = self(x)
         loss = self.criterion(output, y)
         linear_weights = self.get_linear_weights_norm()
-        fc1_norm = linear_weights['fc1']
-        fc2_norm = linear_weights['fc2']
 
-        self.log('loss', loss, on_step=True, prog_bar=True)
-        self.log('fc1_norm', fc1_norm, on_step=True, prog_bar=True)
-        self.log('fc2_norm', fc2_norm, on_step=True, prog_bar=True)
+        self.log('train_step_loss', loss, on_step=True, prog_bar=True)
+
+        for idx, val in linear_weights.items():
+            self.log(idx, val, on_step=True, prog_bar=True)
+
         return loss
 
     def test_step(self, batch, batch_idx):

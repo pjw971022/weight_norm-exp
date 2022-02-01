@@ -1,12 +1,13 @@
 from dataclasses import dataclass
 import os
-from typing import List
+from omegaconf.listconfig import ListConfig
+
 
 
 @dataclass
 class TrainConfig:
     model: str = 'simple_cnn'
-    hidden_dims: List = 784, 128
+    hidden_dims: ListConfig = 784, 128
     output_dims: int = 10
     optimizer: str = 'adam'
     lr: float = 1e-3
