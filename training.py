@@ -30,7 +30,7 @@ def train(cfg: TrainConfig):
     save_dir_path = to_absolute_path(cfg.save_dir_path)
     os.makedirs(save_dir_path, exist_ok=True)
 
-    checkpoint_callback = ModelCheckpoint(dirpath=save_dir_path)
+    checkpoint_callback = ModelCheckpoint(dirpath=save_dir_path, save_top_k=1, monitor='test_accuracy')
     tb_logger = pl_loggers.TensorBoardLogger(save_dir_path)
 
     trainer = pl.Trainer(max_epochs=cfg.training_epochs, gpus=cfg.gpus, callbacks=[checkpoint_callback])

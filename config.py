@@ -3,11 +3,10 @@ import os
 from omegaconf.listconfig import ListConfig
 
 
-
 @dataclass
 class TrainConfig:
     model: str = 'simple_cnn'
-    hidden_dims: ListConfig = 784, 128
+    hidden_dims: ListConfig = 256,
     output_dims: int = 10
     optimizer: str = 'adam'
     lr: float = 1e-3

@@ -80,22 +80,24 @@ class SimpleCNN(pl.LightningModule):
         x, y = batch
         output = self(x)
         loss = self.criterion(output, y)
+        train_accuracy = (torch.argmax(output, dim=1) == y).float().mean().item()
         linear_weights = self.get_linear_weights_norm()
 
         self.log('train_step_loss', loss, on_step=True, prog_bar=True)
+        self.log('train_accuracy', train_accuracy, on_step=True, prog_bar=True)
 
         for idx, val in linear_weights.items():
             self.log(idx, val, on_step=True, prog_bar=True)
 
         return loss
 
-    def test_step(self, batch, batch_idx):
+    def validation_step(self, batch, batch_idx):
         x, y = batch
         output = self(x)
         accuracy = (torch.argmax(output, dim=1) == y).float().mean().item()
         return accuracy
 
-    def test_epoch_end(self, outputs):
+    def validation_epoch_end(self, outputs):
         accuracy = 0
         for result in outputs:
             accuracy += result
