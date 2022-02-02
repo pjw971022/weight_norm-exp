@@ -114,9 +114,6 @@ class SimpleCNN(pl.LightningModule):
 
         self.log('test_accuracy', accuracy, prog_bar=True)
 
-        linear_weights_lists = self.get_linear_weights_norm()
-        return linear_weights_lists
-
     def get_linear_weights(self):
         linear_weight_lists = []
 
