@@ -84,12 +84,21 @@ class SimpleCNN(pl.LightningModule):
         linear_weights = self.get_linear_weights_norm()
 
         self.log('train_step_loss', loss, on_step=True, prog_bar=True)
-        self.log('train_accuracy', train_accuracy, on_step=True, prog_bar=True)
 
         for idx, val in linear_weights.items():
             self.log(idx, val, on_step=True, prog_bar=True)
 
-        return loss
+        outputs = {"loss": loss, "train_accuracy": train_accuracy}
+
+        return outputs
+
+    def training_epoch_end(self, outputs) -> None:
+        train_accuracy = 0
+        for dic in outputs:
+            train_accuracy += dic['train_accuracy']
+
+        train_accuracy /= len(outputs)
+        self.log('train_accuracy', train_accuracy, on_epoch=True, prog_bar=True)
 
     def validation_step(self, batch, batch_idx):
         x, y = batch
