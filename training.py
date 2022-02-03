@@ -19,7 +19,7 @@ from hydra.utils import to_absolute_path
 
 def train(cfg: TrainConfig):
     model_lists = {"simple_cnn": SimpleCNN}
-    optimizer_lists = {"adam": optim.Adam, 'sgd': optim.SGD}
+    optimizer_lists = {"adam": optim.Adam, 'sgd': optim.SGD, 'adamW':optim.AdamW,"RMSprop":optim.RMSprop,"adamax":optim.Adamax,"adadelta":optim.Adadelta}
     optimizer = optimizer_lists[cfg.optimizer]
 
     model_type = model_lists[cfg.model]

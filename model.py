@@ -15,7 +15,7 @@ class SimpleCNN(pl.LightningModule):
                  hidden_dims: ListConfig,
                  output_dim: int = 10,
                  lr: float = 1e-3,
-                 optimizer: Union[optim.Adam, optim.SGD, optim.AdamW, optim.RMSprop] = optim.Adam):
+                 optimizer: Union[optim.Adam, optim.SGD, optim.AdamW, optim.RMSprop, optim.Adamax, optim.Adadelta] = optim.Adam):
         # eg: hidden_dims = [521, 256, 128]
         super().__init__()
         self.save_hyperparameters("optimizer")
