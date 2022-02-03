@@ -27,3 +27,4 @@ class CIFAR10DataModule(pl.LightningDataModule):
 
     def val_dataloader(self):
         return DataLoader(self.test_set, batch_size=self.batch_size)
+

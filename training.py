@@ -9,7 +9,7 @@ from pytorch_lightning import loggers as pl_loggers
 
 from config import TrainConfig
 
-from simple_cnn import SimpleCNN
+from model import SimpleCNN
 from data_module import CIFAR10DataModule
 
 from pytorch_lightning.callbacks import ModelCheckpoint

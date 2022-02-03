@@ -120,7 +120,6 @@ class SimpleCNN(pl.LightningModule):
         for m in self.modules():
             if isinstance(m, nn.Linear):
                 linear_weight_lists.append(m.weight.cpu().detach().numpy())
-
         return linear_weight_lists
 
     def get_linear_weights_norm(self):
