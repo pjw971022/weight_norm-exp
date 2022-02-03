@@ -82,6 +82,8 @@ class SimpleCNN(pl.LightningModule):
         loss = self.criterion(output, y)
         train_accuracy = (torch.argmax(output, dim=1) == y).float().mean().item()
         linear_weights = self.get_linear_weights_norm()
+        linear_weights_mean = self.get_linear_weights_mean()#weight 자체의 평균이나 분산도 로그에 저장하자!
+        linear_weights_var = self.get_linear_weights_var()
 
         self.log('train_step_loss', loss, on_step=True, prog_bar=True)
 
@@ -121,6 +123,18 @@ class SimpleCNN(pl.LightningModule):
             if isinstance(m, nn.Linear):
                 linear_weight_lists.append(m.weight.cpu().detach().numpy())
         return linear_weight_lists
+    def get_linear_weights_mean(self):
+        # get frobenius norm (전체 element들을 다 더하는거라 mean, variance를 구할 순 없음)
+        linear_weight_lists = self.get_linear_weights()
+        result = {}
+        for idx, weight in enumerate(linear_weight_lists):
+            result[f"fc{idx}_mean"] = np.mean(weight)
+    def get_linear_weights_var(self):
+        # get frobenius norm (전체 element들을 다 더하는거라 mean, variance를 구할 순 없음)
+        linear_weight_lists = self.get_linear_weights()
+        result = {}
+        for idx, weight in enumerate(linear_weight_lists):
+            result[f"fc{idx}_var"] = np.var(weight)
 
     def get_linear_weights_norm(self):
         # get frobenius norm (전체 element들을 다 더하는거라 mean, variance를 구할 순 없음)
