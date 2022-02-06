@@ -6,7 +6,7 @@ from omegaconf.listconfig import ListConfig
 
 @dataclass
 class TrainConfig:
-    model: str = 'simple_cnn'
+    model: str = 'resnet50'
     hidden_dims: ListConfig = 784, 128
     output_dims: int = 10
     optimizer: str = 'adam'

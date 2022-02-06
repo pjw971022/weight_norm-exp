@@ -10,6 +10,7 @@ from pytorch_lightning import loggers as pl_loggers
 from config import TrainConfig
 
 from model import SimpleCNN
+from resnet import resnet18, resnet34, resnet50, resnet101, resnet152
 from data_module import CIFAR10DataModule
 
 from pytorch_lightning.callbacks import ModelCheckpoint
@@ -18,13 +19,14 @@ from hydra.utils import to_absolute_path
 
 
 def train(cfg: TrainConfig):
-    model_lists = {"simple_cnn": SimpleCNN}
+    model_lists = {"simple_cnn": SimpleCNN, "resnet34": resnet34(cfg.lr), "resnet50": resnet50(cfg.lr)}
     optimizer_lists = {"adam": optim.Adam, 'sgd': optim.SGD, 'adamW':optim.AdamW,"RMSprop":optim.RMSprop,"adamax":optim.Adamax,"adadelta":optim.Adadelta}
     optimizer = optimizer_lists[cfg.optimizer]
 
     model_type = model_lists[cfg.model]
 
-    model = model_type(cfg.hidden_dims, cfg.output_dims, cfg.lr, optimizer)
+    #model = model_type(cfg.hidden_dims, cfg.output_dims, cfg.lr, optimizer)
+    model = model_type
     data_module = CIFAR10DataModule(cfg.batch_size)
 
     save_dir_path = to_absolute_path(cfg.save_dir_path)
